@@ -17,7 +17,7 @@ import BookingModel from "./mongodb/models/Booking.js";
 import mime from "mime-types";
 
 dotenv.config();
-const jwtSecret = process.env.JWT_SECRET;
+const jwtSecret = "awdawidhadkawdkajwdhaawhdka";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -63,6 +63,7 @@ const uploadToCloudinary = async (path, mimemtype) => {
 app.get("/api/profile", (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { token } = req.cookies;
+  console.log(token);
 
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userInfo) => {
@@ -129,6 +130,7 @@ app.get("/api/bookings", async (req, res) => {
 
     res.status(200).json(userBookingDocs);
   } catch (e) {
+    console.log(e);
     res.status(500).json(e);
   }
 });
@@ -158,21 +160,29 @@ app.post("/api/login", async (req, res) => {
   if (userDoc) {
     const passOk = bcrypt.compareSync(password, userDoc.password);
 
-    if (passOk) {
-      jwt.sign(
-        {
-          userId: userDoc._id,
-        },
-        jwtSecret,
-        {},
-        (err, token) => {
-          if (err) throw err;
-          res.status(200).cookie("token", token).json(userDoc);
-        }
-      );
-    } else {
-      res.status(422).json("Password is not correct");
-    }
+    try {
+      if (passOk) {
+        jwt.sign(
+          {
+            userId: userDoc._id,
+          },
+          jwtSecret,
+          {},
+          (err, token) => {
+            if (err) throw err;
+            res
+              .status(200)
+              .cookie("token", token, {
+                sameSite: "none",
+                secure: "false",
+              })
+              .json(userDoc);
+          }
+        );
+      } else {
+        res.status(422).json("Password is not correct");
+      }
+    } catch (e) {}
   } else {
     res.status(401).json("User not found");
   }
