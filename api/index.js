@@ -60,7 +60,7 @@ const uploadToCloudinary = async (path, mimemtype) => {
   return secure_url;
 };
 
-app.get("/server/profile", (req, res) => {
+app.get("/api/profile", (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { token } = req.cookies;
 
@@ -77,7 +77,7 @@ app.get("/server/profile", (req, res) => {
   }
 });
 
-app.get("/server/user-places", (req, res) => {
+app.get("/api/user-places", (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { token } = req.cookies;
 
@@ -98,7 +98,7 @@ app.get("/server/user-places", (req, res) => {
   }
 });
 
-app.get("/server/places/:id", async (req, res) => {
+app.get("/api/places/:id", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { id } = req.params;
   try {
@@ -109,7 +109,7 @@ app.get("/server/places/:id", async (req, res) => {
   }
 });
 
-app.get("/server/places", async (req, res) => {
+app.get("/api/places", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   try {
     const placesDoc = await PlaceModel.find();
@@ -119,7 +119,7 @@ app.get("/server/places", async (req, res) => {
   }
 });
 
-app.get("/server/bookings", async (req, res) => {
+app.get("/api/bookings", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   try {
     const { userId } = await getUserDataFromToken(req);
@@ -133,7 +133,7 @@ app.get("/server/bookings", async (req, res) => {
   }
 });
 
-app.post("/server/register", async (req, res) => {
+app.post("/api/register", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { name, email, password } = req.body;
   try {
@@ -149,7 +149,7 @@ app.post("/server/register", async (req, res) => {
   }
 });
 
-app.post("/server/login", async (req, res) => {
+app.post("/api/login", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { email, password } = req.body;
 
@@ -178,11 +178,11 @@ app.post("/server/login", async (req, res) => {
   }
 });
 
-app.post("/server/logout", (req, res) => {
+app.post("/api/logout", (req, res) => {
   res.cookie("token", "").json("Logout Success!");
 });
 
-app.post("/server/upload-by-url", async (req, res) => {
+app.post("/api/upload-by-url", async (req, res) => {
   const { photoLink } = req.body;
   const newName = Date.now() + ".jpg";
   try {
@@ -203,7 +203,7 @@ app.post("/server/upload-by-url", async (req, res) => {
 const photosMiddleware = multer({ dest: "/tmp" });
 
 app.post(
-  "/server/upload",
+  "/api/upload",
   photosMiddleware.array("photos", 20),
   async (req, res) => {
     const uploadedImages = [];
@@ -220,7 +220,7 @@ app.post(
   }
 );
 
-app.post("/server/addPlace", (req, res) => {
+app.post("/api/addPlace", (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { token } = req.cookies;
   const {
@@ -262,7 +262,7 @@ app.post("/server/addPlace", (req, res) => {
   }
 });
 
-app.post("/server/bookings", async (req, res) => {
+app.post("/api/bookings", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const {
     place,
@@ -300,7 +300,7 @@ app.post("/server/bookings", async (req, res) => {
   }
 });
 
-app.put("/server/update-place", async (req, res) => {
+app.put("/api/update-place", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { token } = req.cookies;
   const {

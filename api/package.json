@@ -1,11 +1,11 @@
 {
-  "name": "server",
+  "name": "api",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "node index"
+    "start": "nodemon index"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
