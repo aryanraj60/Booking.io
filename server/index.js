@@ -60,7 +60,7 @@ const uploadToCloudinary = async (path, mimemtype) => {
   return secure_url;
 };
 
-app.get("/profile", (req, res) => {
+app.get("/server/profile", (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { token } = req.cookies;
 
@@ -77,7 +77,7 @@ app.get("/profile", (req, res) => {
   }
 });
 
-app.get("/user-places", (req, res) => {
+app.get("/server/user-places", (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { token } = req.cookies;
 
@@ -98,7 +98,7 @@ app.get("/user-places", (req, res) => {
   }
 });
 
-app.get("/places/:id", async (req, res) => {
+app.get("/server/places/:id", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { id } = req.params;
   try {
@@ -109,7 +109,7 @@ app.get("/places/:id", async (req, res) => {
   }
 });
 
-app.get("/places", async (req, res) => {
+app.get("/server/places", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   try {
     const placesDoc = await PlaceModel.find();
@@ -119,7 +119,7 @@ app.get("/places", async (req, res) => {
   }
 });
 
-app.get("/bookings", async (req, res) => {
+app.get("/server/bookings", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   try {
     const { userId } = await getUserDataFromToken(req);
@@ -133,7 +133,7 @@ app.get("/bookings", async (req, res) => {
   }
 });
 
-app.post("/register", async (req, res) => {
+app.post("/server/register", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { name, email, password } = req.body;
   try {
@@ -149,7 +149,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/server/login", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { email, password } = req.body;
 
@@ -178,11 +178,11 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/logout", (req, res) => {
+app.post("/server/logout", (req, res) => {
   res.cookie("token", "").json("Logout Success!");
 });
 
-app.post("/upload-by-url", async (req, res) => {
+app.post("/server/upload-by-url", async (req, res) => {
   const { photoLink } = req.body;
   const newName = Date.now() + ".jpg";
   try {
@@ -202,21 +202,25 @@ app.post("/upload-by-url", async (req, res) => {
 
 const photosMiddleware = multer({ dest: "/tmp" });
 
-app.post("/upload", photosMiddleware.array("photos", 20), async (req, res) => {
-  const uploadedImages = [];
-  for (let i = 0; i < req.files.length; i++) {
-    const { path, mimetype } = req.files[i];
-    const fileUrl = await uploadToCloudinary(path, mimetype);
-    uploadedImages.push(fileUrl);
+app.post(
+  "/server/upload",
+  photosMiddleware.array("photos", 20),
+  async (req, res) => {
+    const uploadedImages = [];
+    for (let i = 0; i < req.files.length; i++) {
+      const { path, mimetype } = req.files[i];
+      const fileUrl = await uploadToCloudinary(path, mimetype);
+      uploadedImages.push(fileUrl);
+    }
+    if (uploadedImages.length > 0) {
+      res.status(200).json(uploadedImages);
+    } else {
+      res.status(415).json([]);
+    }
   }
-  if (uploadedImages.length > 0) {
-    res.status(200).json(uploadedImages);
-  } else {
-    res.status(415).json([]);
-  }
-});
+);
 
-app.post("/addPlace", (req, res) => {
+app.post("/server/addPlace", (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { token } = req.cookies;
   const {
@@ -258,7 +262,7 @@ app.post("/addPlace", (req, res) => {
   }
 });
 
-app.post("/bookings", async (req, res) => {
+app.post("/server/bookings", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const {
     place,
@@ -296,7 +300,7 @@ app.post("/bookings", async (req, res) => {
   }
 });
 
-app.put("/update-place", async (req, res) => {
+app.put("/server/update-place", async (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { token } = req.cookies;
   const {
