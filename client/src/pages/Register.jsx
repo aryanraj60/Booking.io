@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Loader from "../components/Loader";
 import { encryptPassword } from "../utils";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const registerUser = async (e) => {
     e.preventDefault();
@@ -24,6 +26,7 @@ const Register = () => {
       });
 
       alert("Registration Successfull");
+      navigate("/login");
     } catch (e) {
       alert("Registration failed, Please try again later!");
       console.log("Error", e);
@@ -55,7 +58,7 @@ const Register = () => {
                 setName(e.target.value);
               }}
               placeholder="Keanu Reeves"
-              className="border rounded-md placeholder:text-slate-500 px-2 py-2 w-full"
+              className="border rounded-md placeholder:text-slate-500 px-2 py-2 w-full text-gray-800"
             />
             <input
               type="email"
@@ -64,7 +67,7 @@ const Register = () => {
                 setEmail(e.target.value);
               }}
               placeholder="your@email.com"
-              className="border rounded-md placeholder:text-slate-500 px-2 py-2 w-full"
+              className="border rounded-md placeholder:text-slate-500 px-2 py-2 w-full text-gray-800"
             />
             <input
               type="password"
@@ -73,7 +76,7 @@ const Register = () => {
                 setPassword(e.target.value);
               }}
               placeholder="password"
-              className="border rounded-md placeholder:text-slate-500 px-2 py-2 w-full"
+              className="border rounded-md placeholder:text-slate-500 px-2 py-2 w-full text-gray-800"
             />
 
             <button
@@ -90,7 +93,7 @@ const Register = () => {
             </button>
 
             <div className="flex items-center justify-center gap-1">
-              <p className="text-gray-500">Already a member?</p>
+              <p className="text-gray-300">Already a member?</p>
               <Link to="/login" className="underline font-semibold">
                 Login
               </Link>

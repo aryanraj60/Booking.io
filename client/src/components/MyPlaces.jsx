@@ -46,7 +46,7 @@ const MyPlaces = () => {
           </Link>
         </div>
       )}
-      {places.length > 1 && action !== "new" && (
+      {places.length > 0 && action !== "new" && (
         <div className="max-w-5xl m-auto flex flex-col items-center gap-5 pb-4">
           {places.map((place) => (
             <MyPlaceCard place={place} key={place._id} />

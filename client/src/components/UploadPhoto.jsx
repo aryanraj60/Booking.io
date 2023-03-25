@@ -64,7 +64,6 @@ const UploadPhoto = ({ addedPhotos, setAddedPhotos }) => {
     setAddedPhotos([photoId, ...filterPhotos]);
   };
 
-  console.log("Photos", addedPhotos);
   return (
     <>
       <h2 className="text-2xl px-2 py-1">Upload Photos</h2>

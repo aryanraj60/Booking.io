@@ -147,6 +147,7 @@ app.post("/api/register", async (req, res) => {
 
     res.json(userDoc);
   } catch (e) {
+    console.log(e);
     res.status(422).json(e);
   }
 });
@@ -288,7 +289,7 @@ app.post("/api/bookings", async (req, res) => {
   try {
     const bookedDoc = await BookingModel.find({ place: place, user: user });
 
-    if (bookedDoc) {
+    if (bookedDoc.length > 0) {
       res.status(200).json("already Booked");
     } else {
       const bookingDoc = await BookingModel.create({

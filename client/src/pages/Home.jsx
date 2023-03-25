@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PlaceCard from "../components/PlaceCard";
 import Loader from "../components/Loader";
+import Footer from "../components/Footer";
 
 const Home = () => {
   const [places, setPlaces] = useState([]);
@@ -25,14 +26,17 @@ const Home = () => {
   }
 
   return (
-    <div className="mt-3">
-      {places.length > 1 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {places.map((place) => (
-            <PlaceCard place={place} key={place._id} />
-          ))}
-        </div>
-      )}
+    <div className="home">
+      <div className="mt-3">
+        {places.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {places.map((place) => (
+              <PlaceCard place={place} key={place._id} />
+            ))}
+          </div>
+        )}
+      </div>
+      <Footer />
     </div>
   );
 };
