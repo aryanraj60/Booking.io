@@ -60,6 +60,10 @@ const uploadToCloudinary = async (path, mimemtype) => {
   return secure_url;
 };
 
+app.get("/api/test", (req, res) => {
+  res.json("ok");
+});
+
 app.get("/api/profile", (req, res) => {
   connectDB(process.env.MONGODB_URL);
   const { token } = req.cookies;
